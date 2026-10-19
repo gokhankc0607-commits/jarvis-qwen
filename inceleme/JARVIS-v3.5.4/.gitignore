@@ -1,0 +1,19 @@
+data/
+.env.local
+# --- derleme çıktıları ---
+public/agent/dist/
+public/agent/build/
+public/agent/version.txt
+public/agent/version_info.txt
+public/agent/.venv/
+public/agent/voices/
+public/agent/models/
+__pycache__/
+*.pyc
+*.tsbuildinfo
+# panelin ajanlara dağıttığı derlenmiş EXE (büyük dosya)
+agent-dist/
+
+# Electron masaüstü uygulaması
+electron/node_modules/
+electron/release/

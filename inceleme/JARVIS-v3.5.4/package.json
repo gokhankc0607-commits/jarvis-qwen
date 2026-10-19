@@ -1,0 +1,45 @@
+{
+  "name": "nextjs-postgresql-template",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "electron": "cross-env ELECTRON=true electron electron/main.js",
+    "electron:dev": "concurrently -k -n PANEL,ELECTRON \"next dev\" \"wait-on http://localhost:3000 && cross-env ELECTRON=true JARVIS_DEV=http://localhost:3000 electron electron/main.js\"",
+    "dist": "next build && cd electron && npm install --production=false && npx electron-builder"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.3.14",
+    "@types/qrcode": "^1.5.5",
+    "dotenv": "17.3.1",
+    "drizzle-orm": "0.45.2",
+    "lightweight-charts": "^5.0.8",
+    "next": "16.2.6",
+    "pg": "8.20.0",
+    "qrcode": "^1.5.4",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.17",
+    "@types/node": "22.19.15",
+    "@types/pg": "8.18.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "concurrently": "^9.2.5",
+    "cross-env": "^7.0.3",
+    "drizzle-kit": "0.31.10",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.2.6",
+    "postcss": "8.5.8",
+    "tailwindcss": "4.1.17",
+    "typescript": "5.9.3",
+    "wait-on": "^8.0.5",
+    "electron-store": "^11.0.2"
+  }
+}

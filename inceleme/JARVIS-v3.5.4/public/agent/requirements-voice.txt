@@ -1,0 +1,4 @@
+# JARVIS — SES (istege bagli; kurulamazsa ajan sessiz/pyttsx3 modunda calisir)
+faster-whisper>=1.1.0
+sounddevice>=0.5.1
+piper-tts>=1.2.0

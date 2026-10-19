@@ -1,0 +1,73 @@
+# GitHub Actions — JARVIS.exe'yi Windows sunucusunda otomatik derler + TEST EDER.
+# Kullanım: JARVIS-Agent klasörünü (zip içeriği) yeni bir GitHub reposunun köküne koyup push edin.
+# .github/workflows/build-agent.yml zaten yerindedir. Actions > "Build JARVIS EXE" > Run workflow.
+# DİKKAT: config.json ajan anahtarınızı içerir — reponuzu PRIVATE yapın veya config.json'u silin.
+# Actions sekmesinden "JARVIS-Windows" artefaktını (EXE + Setup + taşınabilir zip) indirin.
+name: Build JARVIS EXE
+on:
+  workflow_dispatch:
+    inputs:
+      install_innosetup:
+        description: "Inno Setup kurulsun mu (Setup.exe)?"
+        type: boolean
+        default: true
+      download_models:
+        description: "Ses + Whisper modellerini indir (yavaş, büyük)"
+        type: boolean
+        default: false
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Bağımlılıklar
+        run: |
+          python -m pip install --upgrade pip wheel
+          pip install -r requirements.txt -r requirements-voice.txt "pyinstaller>=6.10,<7"
+
+      - name: Doğrulamalar + birim testleri
+        run: python build.py --check
+
+      - name: Modeller (opsiyonel)
+        if: ${{ inputs.download_models == true || startsWith(github.ref, 'refs/tags/v') }}
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force voices, models | Out-Null
+          $pv = "https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/dfki/medium"
+          Invoke-WebRequest "$pv/tr_TR-dfki-medium.onnx" -OutFile voices/tr_TR-dfki-medium.onnx
+          Invoke-WebRequest "$pv/tr_TR-dfki-medium.onnx.json" -OutFile voices/tr_TR-dfki-medium.onnx.json
+          python -c "from faster_whisper import download_model; download_model('small', output_dir='models/whisper-small')"
+
+      - name: Inno Setup
+        if: ${{ inputs.install_innosetup != false }}
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) { choco install innosetup -y --no-progress }
+
+      - name: Derle (tek EXE + taşınabilir + Setup)
+        run: python build.py --onefile --portable --setup
+
+      - name: Açılış testi (EXE gerçekten çalıştırılır)
+        run: python build.py --smoke
+
+      - name: Dağıtım arşivi
+        run: python build.py --zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JARVIS-Windows
+          path: |
+            dist/JARVIS-Setup.exe
+            dist/JARVIS-Portable/
+            dist/JARVIS-Windows-*.zip
+            dist/JARVIS-Portable-*.zip
+          if-no-files-found: warn

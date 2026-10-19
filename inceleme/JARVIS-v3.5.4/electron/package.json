@@ -1,0 +1,66 @@
+{
+  "name": "jarvis-desktop",
+  "version": "3.5.4",
+  "private": true,
+  "description": "JARVIS — MT5/Kripto Algoritmik İşlem Merkezi (Electron masaüstü uygulaması)",
+  "author": "JARVIS",
+  "license": "UNLICENSED",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "cd .. && npm run build && cd electron && electron-builder"
+  },
+  "build": {
+    "appId": "com.jarvis.desktop",
+    "productName": "JARVIS",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "../.next/**/*",
+      "../public/**/*",
+      "../next.config.ts",
+      "../package.json",
+      "../package-lock.json",
+      "../tsconfig.json",
+      "../drizzle.config.json",
+      "../node_modules/**/*"
+    ],
+    "asarUnpack": [
+      "**/*.node",
+      "**/node_modules/@electric-sql/pglite/dist/**"
+    ],
+    "extraMetadata": {
+      "main": "electron/main.js"
+    },
+    "win": {
+      "target": ["nsis"],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.finance",
+      "icon": "build/icon.icns"
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Office",
+      "icon": "build/icon.png"
+    }
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0"
+  },
+  "devDependencies": {
+    "electron": "^33.3.1",
+    "electron-builder": "^25.1.8"
+  }
+}
