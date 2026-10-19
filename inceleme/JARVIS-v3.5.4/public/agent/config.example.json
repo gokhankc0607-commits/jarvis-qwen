@@ -1,0 +1,31 @@
+{
+  "dashboard_url": "http://localhost:3000",
+  "agent_key": "jrv_PANELDEKI_AJAN_ANAHTARI",
+  "open_browser": true,
+  "sync_interval": 2.0,
+  "scan_interval": 10.0,
+  "mt5": {
+    "terminal_path": "C:\\Program Files\\MetaTrader 5\\terminal64.exe",
+    "login": 0,
+    "password": "",
+    "server": "",
+    "magic": 770077
+  },
+  "metaeditor_path": "C:\\Program Files\\MetaTrader 5\\metaeditor64.exe",
+  "mql5_dir": "C:\\Users\\KULLANICI\\AppData\\Roaming\\MetaQuotes\\Terminal\\TERMINAL_ID\\MQL5",
+  "wine": false,
+  "llm": {
+    "kind": "ollama",
+    "baseUrl": "http://localhost:11434",
+    "model": "qwen2.5-coder:14b",
+    "apiKey": ""
+  },
+  "voice": {
+    "enabled": true,
+    "wake_word": "jarvis",
+    "whisper_model": "small",
+    "device": "auto",
+    "compute_type": "int8",
+    "piper_model": "voices/tr_TR-dfki-medium.onnx"
+  }
+}
